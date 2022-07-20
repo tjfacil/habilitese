@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { TemplateHandler } from 'easy-template-x';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-
-interface Template {
-  enderecamento: string;
-  processo: string;
-  parte: string;
-  data: string;
-  [ḱey: string]: string;
-}
+import Grid from '@mui/material/Grid';
+import XlsxData, { Template } from './components/xlsx/XlsxData';
+import DocxData from './components/docx/DocxData';
+import Header from './components/header/Header';
 
 const DATA: Template[] = [
   {
@@ -34,12 +30,7 @@ const DATA: Template[] = [
 
 const App = () => {
   const [templateFile, setTemplateFile] = useState<File | undefined>(undefined);
-
-  const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setTemplateFile(event.target.files[0]);
-    }
-  };
+  const [data, setData] = useState<Template[]>([]);
 
   const generateDocs = async () => {
     const zip = new JSZip();
@@ -54,18 +45,27 @@ const App = () => {
     zip.generateAsync({ type: 'blob' }).then((content) => {
       FileSaver.saveAs(content, 'tjfacil.zip');
     });
-
   };
 
   return (
     <>
-      <h1>Habilite-se</h1>
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea quisquam
-        consectetur obcaecati quidem officiis a tempore dolores, neque.
-      </p>
-      <input type='file' onChange={onChangeFile} />
-      <button onClick={generateDocs}>Gerar petições</button>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Header />
+        </Grid>
+
+        <Grid item xs={6}>
+          <DocxData setTemplateFile={setTemplateFile} />
+        </Grid>
+
+        <Grid item xs={6}>
+          <XlsxData data={data} setData={setData} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <button onClick={generateDocs}>Gerar petições</button>
+        </Grid>
+      </Grid>
     </>
   );
 };
