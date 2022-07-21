@@ -16,11 +16,24 @@ interface IProps {
   setData: (data: Template[]) => void;
 }
 
+const defaultColsMap = {
+  enderecamento: '',
+  processo: '',
+  parte: '',
+  data: '',
+};
+
 const XlsxData: React.FC<IProps> = ({ data, setData }) => {
   const [allWorksheets, setAllWorksheets] = useState<string[]>([]);
   const [selectedWorksheet, setSelectedWorksheet] = useState<string>('');
   const [fileJson, setFileJson] = useState<FileJson[]>([]);
-  const [rowMap, setRowMap] = useState<Template | null>(null);
+  const [colsMap, setColsMap] = useState<Template>(defaultColsMap);
+
+  const handleColsChange = (colName: string, colValue: string) => {
+    const xlsxCols = { ...colsMap };
+    xlsxCols[colName] = colValue;
+    setColsMap(xlsxCols);
+  };
 
   const onChangeXlsxFile = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -37,19 +50,6 @@ const XlsxData: React.FC<IProps> = ({ data, setData }) => {
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(worksheet) as FileJson[];
     setFileJson(jsonData);
-  };
-
-  const updateData = () => {
-    const newData: Template[] = [];
-    for (const row of fileJson) {
-      newData.push({
-        enderecamento: row['vara'],
-        processo: '',
-        parte: '',
-        data: '',
-      });
-    }
-    setData(newData);
   };
 
   return (
