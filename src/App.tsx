@@ -8,8 +8,10 @@ import DocxData from './components/docx/DocxData';
 import Header from './components/header/Header';
 import { getDate, getFullEnderecamento } from './utils/lib';
 import Options, { IOptions } from './components/options/Options';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-const template: Template = {
+export const defaultTemplate: Template = {
   enderecamento: '',
   processo: '',
   parte: '',
@@ -17,21 +19,25 @@ const template: Template = {
   data: '',
 };
 
-const defaultOptions: IOptions = {
+export const defaultOptions: IOptions = {
   court: '',
   instancia: '',
 };
 
 const App = () => {
   const [templateFile, setTemplateFile] = useState<File | undefined>(undefined);
-  const [templateCols, setTemplateCols] = useState<Template>(template);
+  const [templateCols, setTemplateCols] = useState<Template>(defaultTemplate);
   const [xlsxJson, setXlsxJson] = useState<XlsxJson[]>([]);
   const [options, setOptions] = useState<IOptions>(defaultOptions);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const generateDocs = async () => {
+    setIsLoading(true);
     const data = buildData();
     if (data.length > 0) {
       buildTemplates(data);
+    } else {
+      setIsLoading(false);
     }
   };
 
@@ -101,29 +107,22 @@ const App = () => {
     }
     zip.generateAsync({ type: 'blob' }).then((content) => {
       FileSaver.saveAs(content, 'tjfacil.zip');
+      setIsLoading(false);
     });
   };
 
-  console.log(options);
-
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        flexDirection='column'
-        justifyContent='center'
-        alignItems='stretch'
-      >
+      <Grid container spacing={2} flexDirection='column' alignItems='stretch'>
         <Grid item xs={12}>
           <Header />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} margin='1em auto'>
           <DocxData setTemplateFile={setTemplateFile} />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} margin='1em auto 0 auto'>
           <XlsxData
             xlsxJson={xlsxJson}
             setXlsxJson={setXlsxJson}
@@ -132,12 +131,18 @@ const App = () => {
           />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} margin='1em auto 0 auto'>
           <Options options={options} setOptions={setOptions} />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <button onClick={generateDocs}>Gerar petições</button>
+        <Grid item xs={12} sm={6} margin='1em auto'>
+          {isLoading ? (
+            <Typography variant='body1'>Carregando...</Typography>
+          ) : (
+            <Button variant='contained' onClick={generateDocs}>
+              Gerar petições
+            </Button>
+          )}
         </Grid>
       </Grid>
     </>

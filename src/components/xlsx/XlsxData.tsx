@@ -98,24 +98,31 @@ const XlsxData: React.FC<IProps> = ({
         value={value}
         onChange={(event, newValue) => onChange(event, newValue)}
         renderInput={(params) => <TextField {...params} label={sectionTitle} />}
+        style={{ marginBottom: '1rem' }}
+        data-testid='xlsx-column'
       />
     );
   };
 
   return (
     <>
-      <Typography variant='body1'>
-        Escolha uma planilha com os dados para preencher o modelo.
-      </Typography>
-      <input type='file' onChange={onChangeXlsxFile} />
+      <label htmlFor='xlsx-uploader'>
+        <Typography variant='body1' fontWeight='bold'>
+          Escolha uma planilha com os dados para preencher o modelo
+        </Typography>
+      </label>
+      <input id='xlsx-uploader' type='file' accept='.xlsx' onChange={onChangeXlsxFile} />
 
       {xlsxJson.length > 0 && (
-        <>
-          {columnSection('Endereçamento', enderecamento, onChangeEnderecamento)}
+        <div style={{ marginTop: '1rem', maxWidth: '400px' }}>
+          <Typography variant='body1' fontWeight='bold' marginBottom='1rem'>
+            Escolha quais colunas da planilha usar
+          </Typography>
           {columnSection('Número do processo', processo, onChangeProcesso)}
           {columnSection('Parte contrária', parte, onChangeParte)}
+          {columnSection('Serventia', enderecamento, onChangeEnderecamento)}
           {columnSection('Juiz', juiz, onChangeJuiz)}
-        </>
+        </div>
       )}
     </>
   );

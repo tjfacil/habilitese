@@ -6,6 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 
 export interface IOptions {
   court: string;
@@ -52,32 +53,55 @@ const Options: React.FC<IProps> = ({ options, setOptions }) => {
 
   return (
     <>
-      <p>Options</p>
+      <Typography variant='body1' fontWeight='bold' marginBottom='1rem'>
+        Escolha o Tribunal
+      </Typography>
       {courts.length > 0 && (
-        <Autocomplete
-          disablePortal
-          size='small'
-          options={courts}
-          value={selectedCourt}
-          onChange={onCourtChange}
-          renderInput={(params) => <TextField {...params} label='Tribunal' />}
-        />
+        <div
+          style={{
+            width: '100%',
+            minWidth: '600px',
+            maxWidth: '800px',
+            marginBottom: '1rem',
+          }}
+        >
+          <Autocomplete
+            disablePortal
+            size='small'
+            options={courts}
+            value={selectedCourt}
+            onChange={onCourtChange}
+            renderInput={(params) => <TextField {...params} label='Tribunal' />}
+          />
+        </div>
       )}
 
-      <FormControl>
-        <InputLabel id='instancia-label'>Instância</InputLabel>
-        <Select
-          labelId='instancia-label'
-          id='instancias-select'
-          value={instancia}
-          label='Instância'
-          onChange={onInstanciaChange}
-        >
-          <MenuItem value={1}>Primeira</MenuItem>
-          <MenuItem value={2}>Segunda</MenuItem>
-          <MenuItem value={3}>Superior</MenuItem>
-        </Select>
-      </FormControl>
+      <Typography variant='body1' fontWeight='bold' marginBottom='1rem'>
+        Escolha a instância
+      </Typography>
+      <div
+        style={{
+          width: '100%',
+          minWidth: '600px',
+          maxWidth: '800px',
+          marginBottom: '1rem',
+        }}
+      >
+        <FormControl style={{ minWidth: '400px' }}>
+          <InputLabel id='instancia-label'>Instância</InputLabel>
+          <Select
+            labelId='instancia-label'
+            id='instancias-select'
+            value={instancia}
+            label='Instância'
+            onChange={onInstanciaChange}
+          >
+            <MenuItem value={1}>Primeira</MenuItem>
+            <MenuItem value={2}>Segunda</MenuItem>
+            <MenuItem value={3}>Superior</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
     </>
   );
 };

@@ -13,10 +13,17 @@ const DocxData: React.FC<IProps> = ({ setTemplateFile }) => {
 
   return (
     <>
-      <Typography variant='body1'>
-        Escolha uma petição para servir de modelo.
-      </Typography>
-      <input type='file' onChange={onChangeTemplateFile} />
+      <label htmlFor='docx-uploader'>
+        <Typography variant='body1' fontWeight='bold'>
+          Escolha uma petição para servir de modelo
+        </Typography>
+      </label>
+      <input
+        id='docx-uploader'
+        type='file'
+        accept='.doc,.docx'
+        onChange={onChangeTemplateFile}
+      />
     </>
   );
 };

@@ -8,7 +8,7 @@ const Header = () => {
       </Typography>
       <Typography variant='body1' textAlign='center'>
         Crie petições de habilitação processual em segudos direto do seu
-        navegador.
+        navegador
       </Typography>
     </>
   );
