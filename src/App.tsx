@@ -86,7 +86,7 @@ const App = () => {
       newData.push({
         enderecamento,
         processo,
-        parte,
+        parte: parte.toUpperCase(),
         juiz,
         data: getDate(),
       });
